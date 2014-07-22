@@ -33,10 +33,13 @@ function provision_ssl_fixes_provision_apache_vhost_config($uri, $data) {
     //$config[] .= '    SSLCipherSuite ALL:!ADH:RC4+RSA:+HIGH:+MEDIUM:-LOW:-SSLv2:-EXP';
 
     $key = $http->context->ssl_key;
-    if (file_exists("$ssl_root/$key/sub.class2.server.ca.pem")) {
+    if (file_exists("$ssl_root/$key/ca_bundle.crt")) {
+      $config[] .= "    SSLCertificateChainFile $ssl_root/$key/ca_bundle.crt";
+    }
+    elseif (file_exists("$ssl_root/$key/sub.class2.server.ca.pem")) {
       $config[] .= "    SSLCertificateChainFile $ssl_root/$key/sub.class2.server.ca.pem";
     }
-    if (file_exists("$ssl_root/$key/ca.pem")) {
+    elseif (file_exists("$ssl_root/$key/ca.pem")) {
       $config[] .= "    SSLCACertificateFile $ssl_root/$key/ca.pem";
     }
 
